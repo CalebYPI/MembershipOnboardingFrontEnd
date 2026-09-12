@@ -3,6 +3,7 @@ package za.co.christianassembliesparkwood.membershiponboarding.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +16,7 @@ public class Member implements Serializable {
     private String firstName;
     private String lastName;
     private String gender;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     private String maritalStatus;
     private String phoneNumber;

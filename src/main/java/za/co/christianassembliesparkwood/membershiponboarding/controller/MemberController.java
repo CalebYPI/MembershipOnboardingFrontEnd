@@ -33,7 +33,7 @@ public class MemberController {
     @PostMapping(value ="/create")
     public String create(@ModelAttribute Member member, BindingResult result, Model model) {
         if (result.hasErrors())
-            return "memberError";
+            return "memberAdd";
         Member newMember = MemberFactory.createMember(member.getFirstName(), member.getLastName(), member.getGender(), member.getBirthDate(), member.getMaritalStatus(), member.getPhoneNumber(), member.getEmail(), member.getAddress(), member.getDepartment(), member.getStatus(), member.getRole());
         service.create(newMember);
         return "redirect:/member/home";
@@ -51,10 +51,10 @@ public class MemberController {
         return "memberUpdate";
     }
 
-    @PostMapping("/update")
+    @PostMapping(value = "/update")
     public String update(Member member, BindingResult result, Model model) {
         if (result.hasErrors())
-            return "memberUpdate";
+            return "memberError";
         service.update(member);
         return "redirect:/member/home";
     }
