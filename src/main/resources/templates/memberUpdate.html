@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Member &middot; Christian Assemblies Parkwood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">
+            <div class="brand-mark">CA</div>
+            <div class="brand-text">
+                <h1>Christian Assemblies Parkwood</h1>
+                <span>Membership Onboarding</span>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <a th:href="@{/member/home}" href="memberHome.html" class="active">Members</a>
+            <a th:href="@{/member/create}" href="memberAdd.html">Add Member</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <h2>Edit member</h2>
+            <p th:text="${member != null} ? ('Updating ' + member.firstName + ' ' + member.lastName + '&#39;s record.') : 'Updating a member record.'">
+                Updating Thandiwe Mokoena&rsquo;s record.
+            </p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <!--
+          Binds to the "member" model attribute populated by
+          MemberController#getUpdateForm (now using model.addAttribute correctly)
+          and posts back to POST /member/update. member.id is a String (matches
+          the entity's @Id field), so the hidden id field below is passed through as-is.
+        -->
+        <form th:action="@{/member/update}" th:object="${member}" action="#" method="post">
+
+            <input type="hidden" th:field="*{id}" name="id" value="1042">
+
+            <fieldset>
+                <legend>Personal details</legend>
+                <div class="field-grid">
+                    <div class="field">
+                        <label for="firstName">First name</label>
+                        <input type="text" id="firstName" th:field="*{firstName}" name="firstName" value="Thandiwe" required>
+                    </div>
+                    <div class="field">
+                        <label for="lastName">Last name</label>
+                        <input type="text" id="lastName" th:field="*{lastName}" name="lastName" value="Mokoena" required>
+                    </div>
+                    <div class="field">
+                        <label for="gender">Gender</label>
+                        <select id="gender" th:field="*{gender}" name="gender">
+                            <option value="">Select&hellip;</option>
+                            <option value="Female" selected>Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="birthDate">Date of birth</label>
+                        <input type="date" id="birthDate" th:field="*{birthDate}" name="birthDate" value="1990-04-12">
+                    </div>
+                    <div class="field">
+                        <label for="maritalStatus">Marital status</label>
+                        <select id="maritalStatus" th:field="*{maritalStatus}" name="maritalStatus">
+                            <option value="">Select&hellip;</option>
+                            <option value="Single">Single</option>
+                            <option value="Married" selected>Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Contact details</legend>
+                <div class="field-grid">
+                    <div class="field">
+                        <label for="phoneNumber">Phone number</label>
+                        <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" name="phoneNumber" value="082 555 0134">
+                    </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" th:field="*{email}" name="email" value="thandiwe.m@example.com">
+                    </div>
+                    <div class="field full">
+                        <label for="address">Address</label>
+                        <textarea id="address" th:field="*{address}" name="address">14 Vineyard Road, Parkwood</textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Membership details</legend>
+                <div class="field-grid">
+                    <div class="field">
+                        <label for="department">Department</label>
+                        <select id="department" th:field="*{department}" name="department">
+                            <option value="">Select&hellip;</option>
+                            <option value="Worship Team" selected>Worship Team</option>
+                            <option value="Ushering">Ushering</option>
+                            <option value="Children's Ministry">Children's Ministry</option>
+                            <option value="Youth Ministry">Youth Ministry</option>
+                            <option value="Media &amp; Sound">Media &amp; Sound</option>
+                            <option value="Outreach">Outreach</option>
+                            <option value="Administration">Administration</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="status">Status</label>
+                        <select id="status" th:field="*{status}" name="status">
+                            <option value="Active" selected>Active</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="role">Role</label>
+                        <select id="role" th:field="*{role}" name="role">
+                            <option value="Member" selected>Member</option>
+                            <option value="Leader">Leader</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <a class="btn btn-ghost" th:href="@{/member/home}" href="memberHome.html">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members &middot; Christian Assemblies Parkwood</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../static/css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">
+            <div class="brand-mark">CA</div>
+            <div class="brand-text">
+                <h1>Christian Assemblies Parkwood</h1>
+                <span>Membership Onboarding</span>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <a th:href="@{/member/home}" href="memberHome.html" class="active">Members</a>
+            <a th:href="@{/member/create}" href="memberAdd.html">Add Member</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <h2>Members</h2>
+            <p>Everyone currently onboarded into the church database.</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/member/create}" href="memberAdd.html">+ Add member</a>
+    </div>
+
+    <div class="table-wrap">
+        <table class="members">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!-- th:each iterates the model attribute "members" (Set<Member> from MemberController#home) -->
+            <tr th:each="member : ${members}">
+                <td class="name-cell">
+                    <strong th:text="${member.firstName + ' ' + member.lastName}">Thandiwe Mokoena</strong>
+                    <span th:text="${member.gender + ' &middot; ' + member.maritalStatus}">Female &middot; Married</span>
+                </td>
+                <td>
+                    <div th:text="${member.email}">thandiwe.m@example.com</div>
+                    <div th:text="${member.phoneNumber}">082 555 0134</div>
+                </td>
+                <td th:text="${member.department}">Worship Team</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${member.status == 'Active'} ? 'badge-active' : (${member.status == 'Pending'} ? 'badge-pending' : 'badge-inactive')"
+                          th:text="${member.status}">Active</span>
+                </td>
+                <td th:text="${member.role}">Member</td>
+                <td>
+                    <div class="row-actions">
+                        <a class="btn btn-ghost" th:href="@{/member/update/{id}(id=${member.id})}" href="memberUpdate.html">Edit</a>
+                        <a class="btn-danger-text"
+                           th:href="@{/member/delete/{id}(id=${member.id})}"
+                           href="#"
+                           onclick="return confirm('Remove this member? This can\'t be undone.');">Delete</a>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Static preview rows so the table has a look-and-feel before real data is wired up.
+                 th:remove="all" strips these out at render time; Thymeleaf only shows the ${location} loop above. -->
+            <tr th:remove="all">
+                <td class="name-cell"><strong>Sipho Ndlovu</strong><span>Male &middot; Single</span></td>
+                <td><div>sipho.n@example.com</div><div>071 555 0192</div></td>
+                <td>Ushering</td>
+                <td><span class="badge badge-active">Active</span></td>
+                <td>Leader</td>
+                <td><div class="row-actions"><a class="btn btn-ghost" href="memberUpdate.html">Edit</a><a class="btn-danger-text" href="#">Delete</a></div></td>
+            </tr>
+            <tr th:remove="all">
+                <td class="name-cell"><strong>Ruth van der Merwe</strong><span>Female &middot; Widowed</span></td>
+                <td><div>ruth.vdm@example.com</div><div>083 555 0177</div></td>
+                <td>Children's Ministry</td>
+                <td><span class="badge badge-pending">Pending</span></td>
+                <td>Member</td>
+                <td><div class="row-actions"><a class="btn btn-ghost" href="memberUpdate.html">Edit</a><a class="btn-danger-text" href="#">Delete</a></div></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <!-- Shown only when ${location} is empty -->
+        <div class="empty-state" th:if="${members == null or #sets.isEmpty(members)}">
+            <p>No members yet. Add your first member to get started.</p>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>
