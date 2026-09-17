@@ -42,6 +42,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Set<Member> getAll() {
-        return new HashSet<>((Collection) this.repository.findAll());
+        return new HashSet<>(this.repository.findAll());
     }
 }
