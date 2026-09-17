@@ -303,3 +303,64 @@ fieldset legend {
   main.page { padding: 28px 20px 60px; }
   .form-card { padding: 22px; }
 }
+
+.dashboard { margin-bottom: 2rem; }
+
+.scorecards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.scorecard {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  border-left: 6px solid #3f51b5;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.scorecard .sc-label {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #6b7280;
+}
+.scorecard .sc-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+.sc-total    { border-left-color: #3f51b5; }
+.sc-active   { border-left-color: #2e7d32; }
+.sc-inactive { border-left-color: #c62828; }
+.sc-pending  { border-left-color: #f9a825; }
+.sc-dept     { border-left-color: #6a1b9a; }
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+.chart-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1rem 1.25rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.chart-card h3 {
+  margin: 0 0 .75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+.chart-canvas-wrap {
+  position: relative;
+  height: 300px;
+}
+@media (max-width: 900px) {
+  .charts-grid { grid-template-columns: 1fr; }
+}

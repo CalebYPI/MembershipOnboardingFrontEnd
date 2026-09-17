@@ -1,6 +1,10 @@
 package za.co.christianassembliesparkwood.membershiponboarding.controller;
 
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +25,33 @@ public class MemberController {
 
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("members", service.getAll());
+        Set<Member> members = service.getAll();
+        model.addAttribute("members", members);
+
+        long total = members.size();
+        long active = members.stream()
+                .filter(m -> "Active".equalsIgnoreCase(m.getStatus())).count();
+        long inactive = members.stream()
+                .filter(m -> "Inactive".equalsIgnoreCase(m.getStatus())).count();
+        long pending = members.stream()
+                .filter(m -> "Pending".equalsIgnoreCase(m.getStatus())).count();
+
+        model.addAttribute("totalMembers",  total);
+        model.addAttribute("activeCount",   active);
+        model.addAttribute("inactiveCount", inactive);
+        model.addAttribute("pendingCount",  pending);
+
+        Map<String, Long> byDept = members.stream()
+                .filter(m -> m.getDepartment() != null && !m.getDepartment().isBlank())
+                .collect(Collectors.groupingBy(
+                        Member::getDepartment,
+                        TreeMap::new,
+                        Collectors.counting()));
+
+        model.addAttribute("departmentCount",  byDept.size());
+        model.addAttribute("departmentLabels", new ArrayList<>(byDept.keySet()));
+        model.addAttribute("departmentCounts", new ArrayList<>(byDept.values()));
+
         return "memberHome";
     }
 

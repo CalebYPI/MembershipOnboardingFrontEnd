@@ -35,7 +35,65 @@
         <a class="btn btn-primary" th:href="@{/member/create}" href="memberAdd.html">+ Add member</a>
     </div>
 
-    <div class="table-wrap">
+    <!-- ================= DASHBOARD ================= -->
+    <section class="dashboard">
+
+        <!-- Scorecards -->
+        <div class="scorecards">
+            <div class="scorecard sc-total">
+                <span class="sc-label">Total Members</span>
+                <span class="sc-value" th:text="${totalMembers}">0</span>
+            </div>
+            <div class="scorecard sc-active">
+                <span class="sc-label">Active</span>
+                <span class="sc-value" th:text="${activeCount}">0</span>
+            </div>
+            <div class="scorecard sc-inactive">
+                <span class="sc-label">Inactive</span>
+                <span class="sc-value" th:text="${inactiveCount}">0</span>
+            </div>
+            <div class="scorecard sc-pending">
+                <span class="sc-label">Pending</span>
+                <span class="sc-value" th:text="${pendingCount}">0</span>
+            </div>
+            <div class="scorecard sc-dept">
+                <span class="sc-label">Departments</span>
+                <span class="sc-value" th:text="${departmentCount}">0</span>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card" >
+                <h3>Members by Activity Status</h3>
+                <div class="chart-canvas-wrap">
+                    <canvas id="statusPieChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card" >
+                <h3>Unique Members by Department</h3>
+                <div class="chart-canvas-wrap">
+                    <canvas id="departmentBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Server data → JS -->
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            window.dashboardData = {
+                active:            /*[[${activeCount}]]*/      0,
+                inactive:          /*[[${inactiveCount}]]*/    0,
+                pending:           /*[[${pendingCount}]]*/     0,
+                departmentLabels:  /*[[${departmentLabels}]]*/ [],
+                departmentCounts:  /*[[${departmentCounts}]]*/ []
+            };
+            /*]]>*/
+        </script>
+    </section>
+    <!-- ================ /DASHBOARD ================ -->
+
+    <div class="table-wrap" style="overflow-y: auto;height: 500px;">
         <table class="members">
             <thead>
             <tr>
@@ -95,7 +153,6 @@
                 <td>Member</td>
                 <td><div class="row-actions"><a class="btn btn-ghost" href="memberUpdate.html">Edit</a><a class="btn-danger-text" href="#">Delete</a></div></td>
             </tr>
-
             </tbody>
         </table>
 
@@ -105,6 +162,79 @@
         </div>
     </div>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    (function () {
+        const d = window.dashboardData;
+        if (!d || typeof Chart === 'undefined') return;
+
+        // --- Pie chart: Activity status (with percentage in tooltip) ---
+        const pieEl = document.getElementById('statusPieChart');
+        if (pieEl) {
+            new Chart(pieEl, {
+                type: 'pie',
+                data: {
+                    labels: ['Active', 'Inactive', 'Pending'],
+                    datasets: [{
+                        data: [d.active, d.inactive, d.pending],
+                        backgroundColor: ['#2e7d32', '#c62828', '#f9a825'],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = total ? ((ctx.parsed / total) * 100).toFixed(1) : '0.0';
+                                    return ctx.label + ': ' + ctx.parsed + ' (' + pct + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Bar chart: Members by department ---
+        const barEl = document.getElementById('departmentBarChart');
+        if (barEl) {
+            new Chart(barEl, {
+                type: 'bar',
+                data: {
+                    labels: d.departmentLabels,
+                    datasets: [{
+                        label: 'Members',
+                        data: d.departmentCounts,
+                        backgroundColor: '#3f51b5',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } },
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    })();
+</script>
 
 </body>
 </html>
