@@ -1,5 +1,6 @@
 package za.co.christianassembliesparkwood.membershiponboarding.service.impl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,6 +42,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Set<Member> getAll() {
-        return new HashSet<>(this.repository.findAll());
+        return new HashSet<>((Collection) this.repository.findAll());
     }
 }
